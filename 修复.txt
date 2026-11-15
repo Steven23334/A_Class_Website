@@ -1,0 +1,3 @@
+sed -i 's/\r$//' start_local_server.sh
+sed -i 's/\r$//' information/生成资料清单.sh
+sed -i 's/\r$//' gallery/add_photos_json.sh

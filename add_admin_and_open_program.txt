@@ -1,0 +1,4 @@
+chmod +x start_local_server.sh ./start_local_server.sh
+chmod +x information/生成资料清单.sh
+chmod +x gallery/add_photos_json.sh
+bash /start_local_server.sh

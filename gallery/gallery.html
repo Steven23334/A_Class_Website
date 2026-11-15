@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <link rel="icon" href="../image/favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>班级相册 - 萧山尚德801班</title>
+    <link rel="stylesheet" href="../css/main_css.css" />
+    <style>
+      .gallery-months {
+        margin-top: 10px;
+      }
+      .gallery-months .filter-btn {
+        white-space: nowrap;
+      }
+    </style>
+    <script src="../js/site-layout.js" defer></script>
+  </head>
+  <body data-page="gallery" data-base="../">
+    <div class="container">
+      <h2>全部照片与视频</h2>
+      <div class="gallery-toolbar" id="galleryToolbar">
+        <button type="button" class="filter-btn active" data-filter="all">全部</button>
+        <button type="button" class="filter-btn" data-filter="image">图片</button>
+        <button type="button" class="filter-btn" data-filter="video">视频</button>
+      </div>
+
+      <div class="gallery-toolbar gallery-months" id="galleryMonths"></div>
+
+      <div class="gallery-grid" id="galleryGrid"></div>
+      <div class="gallery-empty" id="galleryEmpty">暂时没有内容。</div>
+      <p class="gallery-tip" id="galleryTip"></p>
+    </div>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="媒体预览">
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="关闭预览">✕</button>
+      <button type="button" class="lightbox-prev" id="lightboxPrev" aria-label="上一个">‹</button>
+      <button type="button" class="lightbox-next" id="lightboxNext" aria-label="下一个">›</button>
+      <div class="lightbox-content" id="lightboxContent"></div>
+    </div>
+
+    <script>
+      (function () {
+        const grid = document.getElementById("galleryGrid");
+        const empty = document.getElementById("galleryEmpty");
+        const tip = document.getElementById("galleryTip");
+        const toolbar = document.getElementById("galleryToolbar");
+        const monthBar = document.getElementById("galleryMonths");
+        const lightbox = document.getElementById("lightbox");
+        const lightboxContent = document.getElementById("lightboxContent");
+
+        let items = [];
+        let filtered = [];
+        let currentIndex = 0;
+        let currentFilter = "all";
+        let currentMonth = "all";
+
+        function extOf(file) {
+          const i = file.lastIndexOf(".");
+          return i === -1 ? "" : file.slice(i + 1).toLowerCase();
+        }
+
+        function typeOf(file) {
+          const e = extOf(file);
+          if (e === "mp4") return "video";
+          if (e === "jpg" || e === "jpeg" || e === "png") return "image";
+          return null;
+        }
+
+        function escapeHtml(str) {
+          return String(str).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+          });
+        }
+
+        // 从日期字符串中解析出 YYYY-MM，解析失败返回 null
+        function monthKeyOf(value) {
+          if (!value) return null;
+          const s = String(value).trim();
+          if (!s) return null;
+
+          let m = s.match(/(\d{4})\s*[-/.年]\s*(\d{1,2})/); // 2024-05 / 2024/5 / 2024年5月
+          if (m) return m[1] + "-" + String(Number(m[2])).padStart(2, "0");
+
+          m = s.match(/(\d{1,2})\s*[-/.]\s*(\d{4})/); // 05/2024
+          if (m) return m[2] + "-" + String(Number(m[1])).padStart(2, "0");
+
+          return null;
+        }
+
+        // 从标题末尾取出序号（0-9 这类连续编号），取不到返回 -1
+        function seqOf(title) {
+          const m = String(title || "").match(/-(\d+)$/);
+          return m ? Number(m[1]) : -1;
+        }
+
+        function monthLabel(key) {
+          const parts = key.split("-");
+          return parts[0] + "年" + Number(parts[1]) + "月";
+        }
+
+        async function loadManifest() {
+          const res = await fetch("photos.json", { cache: "no-store" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const data = await res.json();
+          const folder = data.folder || "photos/";
+          const list = Array.isArray(data) ? data : data.items || [];
+
+          return list
+            .map(function (it) {
+              const file = typeof it === "string" ? it : it.file;
+              if (!file) return null;
+              const type = typeOf(file);
+              if (!type) return null;
+              const date = typeof it === "object" && it.date ? String(it.date) : "";
+              const title = typeof it === "object" && it.title ? it.title : file.replace(/\.[^.]+$/, "");
+              return {
+                src: folder + file,
+                type: type,
+                title: title,
+                date: date,
+                month: monthKeyOf(date),
+                seq: seqOf(title),
+              };
+            })
+            .filter(Boolean)
+            // 按日期倒序：最新在前；同一天序号大的在前；其余保持 photos.json 里的原顺序
+            .sort(function (a, b) {
+              const byDate = String(b.date).localeCompare(String(a.date));
+              if (byDate !== 0) return byDate;
+              return (b.seq || 0) - (a.seq || 0);
+            });
+        }
+
+        // 根据数据里的日期生成月份按钮
+        function buildMonthBar() {
+          const counts = {};
+          items.forEach(function (i) {
+            if (!i.month) return;
+            counts[i.month] = (counts[i.month] || 0) + 1;
+          });
+
+          const keys = Object.keys(counts).sort(function (a, b) {
+            return b.localeCompare(a); // 倒序：新的月份在前
+          });
+
+          monthBar.innerHTML = "";
+
+          if (!keys.length) {
+            monthBar.style.display = "none";
+            currentMonth = "all";
+            return;
+          }
+
+          monthBar.style.display = "";
+
+          // 选中的月份已不存在时回退到“全部月份”
+          if (currentMonth !== "all" && keys.indexOf(currentMonth) === -1) {
+            currentMonth = "all";
+          }
+
+          const allBtn = document.createElement("button");
+          allBtn.type = "button";
+          allBtn.className = "filter-btn month-btn" + (currentMonth === "all" ? " active" : "");
+          allBtn.dataset.month = "all";
+          allBtn.textContent = "全部月份";
+          monthBar.appendChild(allBtn);
+
+          keys.forEach(function (k) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "filter-btn month-btn" + (currentMonth === k ? " active" : "");
+            btn.dataset.month = k;
+            btn.textContent = monthLabel(k);
+            btn.title = counts[k] + " 个内容";
+            monthBar.appendChild(btn);
+          });
+        }
+
+        function render() {
+          filtered = items.filter(function (i) {
+            if (currentFilter !== "all" && i.type !== currentFilter) return false;
+            if (currentMonth !== "all" && i.month !== currentMonth) return false;
+            return true;
+          });
+
+          grid.innerHTML = "";
+
+          if (!filtered.length) {
+            empty.style.display = "block";
+            empty.textContent = items.length ? "当前筛选条件下暂时没有内容。" : "暂时没有内容。";
+            return;
+          }
+          empty.style.display = "none";
+
+          filtered.forEach(function (item, idx) {
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "gallery-card";
+            card.setAttribute("aria-label", "预览 " + item.title);
+
+            const thumb = document.createElement("div");
+            thumb.className = "media-thumb";
+
+            if (item.type === "image") {
+              const img = document.createElement("img");
+              img.src = item.src;
+              img.alt = item.title;
+              img.loading = "lazy";
+              img.decoding = "async";
+              thumb.appendChild(img);
+            } else {
+              const video = document.createElement("video");
+              video.src = item.src;
+              video.preload = "metadata";
+              video.muted = true;
+              video.playsInline = true;
+              thumb.appendChild(video);
+
+              const play = document.createElement("span");
+              play.className = "play-icon";
+              play.textContent = "▶";
+              thumb.appendChild(play);
+            }
+
+            const badge = document.createElement("span");
+            badge.className = "badge";
+            badge.textContent = item.type === "video" ? "视频" : "图片";
+            thumb.appendChild(badge);
+
+            const info = document.createElement("div");
+            info.className = "gallery-info";
+            info.innerHTML =
+              "<h3>" + escapeHtml(item.title) + "</h3>" +
+              (item.date ? '<div class="meta">' + escapeHtml(item.date) + "</div>" : "");
+
+            card.appendChild(thumb);
+            card.appendChild(info);
+            card.addEventListener("click", function () { openLightbox(idx); });
+
+            grid.appendChild(card);
+          });
+        }
+
+        function openLightbox(idx) {
+          currentIndex = idx;
+          showCurrent();
+          lightbox.classList.add("open");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+          lightbox.classList.remove("open");
+          lightboxContent.innerHTML = "";
+          document.body.style.overflow = "";
+        }
+
+        function showCurrent() {
+          const item = filtered[currentIndex];
+          if (!item) return;
+
+          lightboxContent.innerHTML = "";
+
+          let media;
+          if (item.type === "video") {
+            media = document.createElement("video");
+            media.src = item.src;
+            media.controls = true;
+            media.playsInline = true;
+            media.autoplay = true;
+          } else {
+            media = document.createElement("img");
+            media.src = item.src;
+            media.alt = item.title;
+          }
+          lightboxContent.appendChild(media);
+
+          const cap = document.createElement("div");
+          cap.className = "lightbox-caption";
+          cap.innerHTML =
+            escapeHtml(item.title) +
+            (item.date ? '<span class="sub">' + escapeHtml(item.date) + "</span>" : "");
+          lightboxContent.appendChild(cap);
+        }
+
+        function prev() {
+          if (!filtered.length) return;
+          currentIndex = (currentIndex - 1 + filtered.length) % filtered.length;
+          showCurrent();
+        }
+
+        function next() {
+          if (!filtered.length) return;
+          currentIndex = (currentIndex + 1) % filtered.length;
+          showCurrent();
+        }
+
+        document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+        document.getElementById("lightboxPrev").addEventListener("click", prev);
+        document.getElementById("lightboxNext").addEventListener("click", next);
+
+        lightbox.addEventListener("click", function (e) {
+          if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (!lightbox.classList.contains("open")) return;
+          if (e.key === "Escape") closeLightbox();
+          if (e.key === "ArrowLeft") prev();
+          if (e.key === "ArrowRight") next();
+        });
+
+        toolbar.addEventListener("click", function (e) {
+          const btn = e.target.closest(".filter-btn");
+          if (!btn) return;
+          currentFilter = btn.dataset.filter;
+          toolbar.querySelectorAll(".filter-btn").forEach(function (b) {
+            b.classList.toggle("active", b === btn);
+          });
+          render();
+        });
+
+        monthBar.addEventListener("click", function (e) {
+          const btn = e.target.closest(".month-btn");
+          if (!btn) return;
+          currentMonth = btn.dataset.month;
+          monthBar.querySelectorAll(".month-btn").forEach(function (b) {
+            b.classList.toggle("active", b === btn);
+          });
+          render();
+        });
+
+        loadManifest()
+          .then(function (list) {
+            items = list;
+            if (!items.length) {
+              monthBar.style.display = "none";
+              empty.style.display = "block";
+              empty.textContent = "photos.json 里没有找到 jpg / png / mp4 文件。";
+              return;
+            }
+            buildMonthBar();
+            render();
+          })
+          .catch(function (err) {
+            monthBar.style.display = "none";
+            empty.style.display = "block";
+            empty.textContent = "读取 photos.json 失败。";
+            tip.textContent =
+              "错误：" + err.message +
+              "。请通过本地服务器打开页面（例如 python -m http.server），或先运行 generate_manifest.py 生成清单。";
+            tip.style.color = "#c0392b";
+          });
+      })();
+    </script>
+  </body>
+</html>

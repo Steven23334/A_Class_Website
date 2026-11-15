@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <!-- 缓存控制：尽量让首页也拿最新版 -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <link rel="icon" href="image/favicon.ico" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>班级资料中转站 - 萧山尚德801班</title>
+  <link rel="stylesheet" href="css/main_css.css" />
+  <script src="js/site-layout.js" defer></script>
+</head>
+
+<body data-page="home">
+  <div class="container">
+    <h2>建立网站初衷</h2>
+    <div class="hero">
+      <p>
+        建立这个网站，是为了给班级做一个属于自己的官网，让大家能更方便地了解班级里今天发生了什么、最近有哪些活动和资料。
+      </p>
+      <p><strong>当然，还是为了整活~</strong></p>
+    </div>
+
+    <h2>快捷入口</h2>
+    <div class="quick-grid">
+      <a class="quick-card" href="news.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">📰</div>
+        <div class="quick-body">
+          <h3>班级新闻</h3>
+          <p>最新动态、通知公告与班级风采，一站看完。</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="information/information.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">📁</div>
+        <div class="quick-body">
+          <h3>资料下载</h3>
+          <p>复习提纲、试卷与课件集中存放，随时获取。</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="calendar.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">📅</div>
+        <div class="quick-body">
+          <h3>活动安排</h3>
+          <p>近期班级与年级的活动日程，提前做好准备。</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="gallery/gallery.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">📷</div>
+        <div class="quick-body">
+          <h3>班级相册</h3>
+          <p>提供了一些同学们的照片。</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="per_days_videos.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">🎬</div>
+        <div class="quick-body">
+          <h3>每日视频</h3>
+          <p>放了些视频。</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="god_insame_people.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">📄</div>
+        <div class="quick-body">
+          <h3>班级分类名单</h3>
+          <p>请输入文本。</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">💬</div>
+        <div class="quick-body">
+          <h3>留言板</h3>
+          <p>给班级网站留下建议、祝福或者一句吐槽。(GitHub Issues)</p>
+        </div>
+      </a>
+
+      <a class="quick-card" href="secret.html" target="_blank" rel="noopener noreferrer">
+        <div class="quick-icon">🔑</div>
+        <div class="quick-body">
+          <h3>特供入口</h3>
+          <p>需要口令的内部区域，验证通过后自动放行。</p>
+        </div>
+      </a>
+    </div>
+
+    <h2>关于本站</h2>
+    <div class="hero">
+      <p>
+        本站由班级同学自发搭建，是一个纯静态的班级资料中转站，不收集任何个人信息，内容以班级日常记录与学习资料为主。
+      </p>
+      <p>
+        如果发现内容有误，或者想投稿、提供资料，欢迎通过“关于我们”页面联系方式找到站长。
+      </p>
+    </div>
+  </div>
+  <!-- container 在这里正确闭合 -->
+
+  <!-- ==================== 底部音乐播放器 ==================== -->
+  <aside id="player" class="music-player" aria-label="音乐播放器">
+    <!-- 播放列表弹窗 -->
+    <div id="playlist" class="playlist" hidden>
+      <div class="playlist-heading">
+        <div>
+          <span class="eyebrow">PLAYLIST</span>
+          <h3>班级日常 BGM</h3>
+        </div>
+        <button type="button" class="player-btn playlist-close" id="playlistClose" aria-label="关闭播放列表">✕</button>
+      </div>
+      <div id="playlistTracks" class="playlist-tracks"></div>
+    </div>
+
+    <div class="player-inner">
+      <div class="player-main">
+        <img id="playerCover" class="player-cover" alt="" width="38" height="38" />
+        <div class="player-info">
+          <strong id="playerTitle" class="player-title">—</strong>
+          <span id="playerArtist" class="player-artist">—</span>
+        </div>
+        <div class="player-controls">
+          <button type="button" id="prevBtn" class="player-btn" aria-label="上一首"></button>
+          <button type="button" id="playBtn" class="player-btn player-play" aria-label="播放"></button>
+          <button type="button" id="nextBtn" class="player-btn" aria-label="下一首"></button>
+        </div>
+        <button type="button" id="listBtn" class="player-btn" aria-label="播放列表" aria-controls="playlist"
+          aria-expanded="false"></button>
+      </div>
+
+      <div class="player-bottom">
+        <div class="player-time">
+          <span id="elapsed">0:00</span><span class="sep">/</span><span id="duration">0:00</span>
+        </div>
+        <input type="range" id="seek" class="player-seek" min="0" max="1000" value="0" step="1"
+          aria-label="播放进度" />
+        <div class="volume-control">
+          <button type="button" id="volumeBtn" class="player-btn" aria-label="静音"></button>
+          <input type="range" id="volumeRange" class="volume-range" min="0" max="1" step="0.01" value="0.6"
+            aria-label="音量" />
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <audio id="audio" preload="metadata"></audio>
+  <script src="js/music-player.js" defer></script>
+</body>
+
+</html>

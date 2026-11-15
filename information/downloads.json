@@ -1,0 +1,40 @@
+{
+  "folder": "downloads/",
+  "items": [
+    {
+      "file": "八上道德与法治知识点（新版）.pdf",
+      "title": "八上道德与法治知识点（新版）",
+      "ext": "pdf",
+      "size": 2496403,
+      "date": "2026-11-04"
+    },
+    {
+      "file": "TlmTellMaids.java",
+      "title": "TlmTellMaids",
+      "ext": "java",
+      "size": 1704,
+      "date": "2026-11-01"
+    },
+    {
+      "file": "期中资料1八年级上册历史复习知识点.docx",
+      "title": "期中资料1八年级上册历史复习知识点",
+      "ext": "docx",
+      "size": 1504595,
+      "date": "2026-10-28"
+    },
+    {
+      "file": "MIT_License.txt",
+      "title": "MIT_License",
+      "ext": "txt",
+      "size": 1091,
+      "date": "2026-09-24"
+    },
+    {
+      "file": "LICENSE-CC-BY-NC-SA-4.0.txt",
+      "title": "LICENSE-CC-BY-NC-SA-4.0",
+      "ext": "txt",
+      "size": 21320,
+      "date": "2026-09-19"
+    }
+  ]
+}

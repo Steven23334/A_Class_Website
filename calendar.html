@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>活动安排 - 萧山尚德801班</title>
+    <link rel="stylesheet" href="css/main_css.css" />
+    <script src="js/site-layout.js" defer></script>
+    <script src="js/calendar.js" defer></script>
+  </head>
+  <body data-page="calendar" data-base="./">
+    <div class="container">
+      <h2>活动安排</h2>
+
+      <div class="calendar-layout">
+        <section class="calendar-panel">
+          <div class="calendar-head">
+            <div class="calendar-title" id="calTitle">加载中…</div>
+            <div class="calendar-nav">
+              <button type="button" class="cal-btn" id="calPrev">‹ 上月</button>
+              <button type="button" class="cal-btn" id="calToday">今天</button>
+              <button type="button" class="cal-btn" id="calNext">下月 ›</button>
+            </div>
+          </div>
+
+          <div class="calendar-weekdays">
+            <span>一</span>
+            <span>二</span>
+            <span>三</span>
+            <span>四</span>
+            <span>五</span>
+            <span>六</span>
+            <span>日</span>
+          </div>
+
+          <div class="calendar-grid" id="calGrid"></div>
+        </section>
+
+        <aside class="event-panel">
+          <h3 id="eventDate">当日活动</h3>
+          <div id="eventList"></div>
+        </aside>
+      </div>
+
+      <p class="calendar-tip" id="calTip"></p>
+    </div>
+  </body>
+</html>

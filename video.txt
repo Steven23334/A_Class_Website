@@ -1,0 +1,95 @@
+  <div class="video-block">
+    <div class="section-label mid">每日视频（发疯）</div>
+
+    <div class="video-wrap">
+      <!-- 换视频只改 data-src：填 www.bilibili.com 视频页链接或 player.bilibili.com 嵌入链接 -->
+      <iframe id="biliPlayer1" class="bili-player"
+        data-src="https://www.bilibili.com/video/BV1ybty6uEWT"
+        scrolling="no" frameborder="no"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen="true"
+        referrerpolicy="no-referrer"
+        loading="lazy"
+        title="每日视频-1"></iframe>
+    </div>
+    <br>
+    <div class="section-label mid">每日视频（探讨）</div>
+    <div class="video-wrap">
+      <!-- 换视频只改 data-src：填 www.bilibili.com 视频页链接或 player.bilibili.com 嵌入链接 -->
+      <iframe id="biliPlayer2" class="bili-player"
+        data-src="https://www.bilibili.com/video/BV13ibFenEYN"
+        scrolling="no" frameborder="no"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen="true"
+        referrerpolicy="no-referrer"
+        loading="lazy"
+        title="每日视频-2"></iframe>
+    </div>
+
+    <div>默认暂停，请点击以开始；按 M 键切换静音</div>
+  </div>
+
+  <script>
+    /* ===== 视频挂载（只认 player.bilibili.com / www.bilibili.com） =====
+       支持页面上任意多个 <iframe class="bili-player" data-src="...">
+    */
+    (function () {
+      var iframes = document.querySelectorAll('iframe[data-src]');
+      if (!iframes.length) return;
+
+      Array.prototype.forEach.call(iframes, function (iframe) {
+        try {
+          var raw = iframe.getAttribute('data-src');
+          if (!raw) return;
+
+          var url = new URL(raw, location.href);
+
+          var isPlayer = url.hostname === 'player.bilibili.com';
+          var isVideoPage = url.hostname === 'www.bilibili.com';
+
+          // 情况 A：player.bilibili.com 嵌入链接 → 直接补/覆盖参数
+          if (isPlayer) {
+            url.searchParams.set('autoplay', '0');
+            url.searchParams.set('muted', '0');
+            iframe.src = url.toString();
+            return;
+          }
+
+          // 情况 B：www.bilibili.com 视频页 → 提取 BV 号转嵌入链接
+          if (isVideoPage) {
+            var m = url.pathname.match(/\/video\/(BV[0-9A-Za-z]+)/);
+            if (m) {
+              var embed = new URL('https://player.bilibili.com/player.html');
+              embed.searchParams.set('bvid', m[1]);
+              embed.searchParams.set('autoplay', '0');
+              embed.searchParams.set('muted', '0');
+              iframe.src = embed.toString();
+              return;
+            }
+            // www.bilibili.com 但不是 /video/BV... 路径（首页、专栏等）→ 走超链接
+          }
+
+          // 情况 C：其他域名（space、m、tv、youtube…）→ 渲染成超链接
+          renderFallbackLink(iframe, url);
+        } catch (e) {
+          console.warn('视频链接解析失败，保持 iframe 原样：', e);
+        }
+      });
+
+      function renderFallbackLink(iframe, u) {
+        var wrap = iframe.parentNode;
+        if (!wrap) return;
+
+        iframe.style.display = 'none';
+
+        var link = document.createElement('a');
+        link.href = u.toString();
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'video-fallback-link';
+        link.textContent = '打开外部链接 · ' + u.hostname;
+
+        wrap.appendChild(link);
+      }
+    })();
+  </script>

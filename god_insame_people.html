@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/image/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>班级神人名单 - 萧山尚德801班</title>
+  <!-- 统一引用外部样式表 -->
+  <link rel="stylesheet" href="css/main_css.css" />
+</head>
+
+<!-- 文案开头 -->
+<!--<div class="container">
+  <h2>班级神人名单</h2>
+</div> -->
+<!-- data-page 决定 header 文案与导航高亮，其余由 site-layout.js 渲染 -->
+
+<body data-page="history">
+  <div class="container">
+    <!-- 使用 main_css.css 中的 .md-content 样式 -->
+    <div id="content" class="md-content">
+      <p class="loading">正在加载 README.md ...</p>
+    </div>
+  </div>
+
+  <!-- 公共布局：自动渲染 header / nav / footer -->
+  <script src="js/site-layout.js"></script>
+
+  <!-- Markdown 渲染 -->
+  <script src="js/Markdown_Lib/marked.min.js"></script>
+  <script>
+    (async () => {
+      const content = document.getElementById("content");
+
+      try {
+        // README.md 路径相对于本页面
+        const response = await fetch("god_insame_people.md", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+
+        const markdownText = await response.text();
+
+        // 把 Markdown 转成 HTML 并挂载
+        content.innerHTML = marked.parse(markdownText);
+
+        // 让外部链接在新标签页打开，避免当前页面被跳走
+        content.querySelectorAll("a").forEach((link) => {
+          if (link.hostname && link.hostname !== location.hostname) {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+          }
+        });
+      } catch (error) {
+        content.innerHTML = `
+                    <p class="error">
+                        加载 README.md 失败：${error.message}<br>
+                        请确认：<br>
+                        1. README.md 路径是否正确；<br>
+                        2. 你是通过本地服务器访问页面，而不是直接双击 HTML 文件。
+                    </p>
+                `;
+        console.error("加载 MD 文件失败:", error);
+      }
+    })();
+  </script>
+</body>
+
+</html>

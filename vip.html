@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <link rel="icon" href="/image/favicon.ico" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>特供内容 - 萧山尚德801班</title>
+  <link rel="stylesheet" href="css/main_css.css" />
+  <script src="js/site-layout.js" defer></script>
+
+  <!-- 门禁：放在 head 里提前执行，避免内容先渲染再跳走 -->
+  <script>
+    (function () {
+      var SESSION_KEY = 'sd801.sess.v2';
+      var s = null;
+      try { s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { }
+
+      if (!s || !s.t || !s.e || !s.u || Date.now() > s.e) {
+        try { localStorage.removeItem(SESSION_KEY); } catch (e) { }
+        location.replace('secret.html');
+      }
+    })();
+  </script>
+</head>
+
+<body data-page="vip">
+  <div class="container">
+    <h2>特供内容</h2>
+
+    <div class="hero">
+      <p>口令验证通过，欢迎进来。</p>
+      <p><strong>这个页面只在当次会话内有效，关掉标签页就需要重新验证。</strong></p>
+      <p>
+        <button class="secret-btn" id="logoutBtn" type="button">退出特供区</button>
+      </p>
+    </div>
+
+    <h2>这里可以放什么</h2>
+    <div class="hero">
+      <ul class="vip-list">
+        <li>班级整活存档 / 黑历史合集</li>
+        <li>内部投票、问卷的直达链接</li>
+        <li>毕业前才能看的那种东西</li>
+        <li>站长私藏的表情包压缩包</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    /* 退出：清掉会话标记，回到密码页 */
+    (function () {
+      var btn = document.getElementById('logoutBtn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        try { localStorage.removeItem('sd801.sess.v2'); } catch (e) { }
+        location.replace('secret.html');
+      });
+    })();
+  </script>
+</body>
+
+</html>

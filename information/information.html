@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <link rel="icon" href="../image/favicon.ico" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>资料下载 - 萧山尚德801班</title>
+  <link rel="stylesheet" href="../css/main_css.css" />
+  <script src="../js/site-layout.js" defer></script>
+</head>
+
+<body data-page="information" data-base="../">
+  <div class="container">
+    <h2>资料下载</h2>
+
+    <div class="gallery-toolbar" id="dlToolbar">
+      <button type="button" class="filter-btn active" data-filter="all">
+        全部
+      </button>
+      <button type="button" class="filter-btn" data-filter="doc">
+        文档
+      </button>
+      <button type="button" class="filter-btn" data-filter="pdf">
+        PDF
+      </button>
+      <button type="button" class="filter-btn" data-filter="sheet">
+        表格
+      </button>
+      <button type="button" class="filter-btn" data-filter="slide">
+        演示
+      </button>
+      <button type="button" class="filter-btn" data-filter="archive">
+        压缩包
+      </button>
+      <button type="button" class="filter-btn" data-filter="java">
+        Java文件
+      </button>
+      <button type="button" class="filter-btn" data-filter="other">
+        其他
+      </button>
+    </div>
+
+    <div class="dl-grid" id="dlGrid"></div>
+    <div class="gallery-empty" id="dlEmpty">暂时没有资料。</div>
+    <p class="gallery-tip" id="dlTip"></p>
+  </div>
+
+  <script>
+    (function () {
+      const grid = document.getElementById("dlGrid");
+      const empty = document.getElementById("dlEmpty");
+      const tip = document.getElementById("dlTip");
+      const toolbar = document.getElementById("dlToolbar");
+
+      let items = [];
+      let filtered = [];
+      let currentFilter = "all";
+
+      const CAT = {
+        pdf: "pdf",
+        doc: "doc",
+        docx: "doc",
+        txt: "doc",
+        md: "doc",
+        xls: "sheet",
+        xlsx: "sheet",
+        csv: "sheet",
+        ppt: "slide",
+        pptx: "slide",
+        zip: "archive",
+        rar: "archive",
+        "7z": "archive",
+        jar: "java",
+        java: "java",
+      };
+
+      const STYLE = {
+        pdf: { color: "#d4380d", label: "PDF" },
+        doc: { color: "#165dff", label: "DOC" },
+        docx: { color: "#165dff", label: "DOC" },
+        txt: { color: "#8a94a6", label: "TXT" },
+        md: { color: "#8a94a6", label: "MD" },
+        xls: { color: "#1a9c4b", label: "XLS" },
+        xlsx: { color: "#1a9c4b", label: "XLS" },
+        csv: { color: "#1a9c4b", label: "CSV" },
+        ppt: { color: "#e8730c", label: "PPT" },
+        pptx: { color: "#e8730c", label: "PPT" },
+        zip: { color: "#722ed1", label: "ZIP" },
+        rar: { color: "#722ed1", label: "RAR" },
+        "7z": { color: "#722ed1", label: "7Z" },
+        jar: { color: "#E76F00", label: "JAR" },
+        java: { color: "#CB4B16", label: "Java" },
+      };
+
+      function catOf(ext) {
+        return CAT[ext] || "other";
+      }
+
+      function styleOf(ext) {
+        return (
+          STYLE[ext] || {
+            color: "#8a94a6",
+            label: (ext || "FILE").toUpperCase().slice(0, 4),
+          }
+        );
+      }
+
+      function fmtSize(n) {
+        if (n === undefined || n === null || n === "") return "";
+        const units = ["B", "KB", "MB", "GB"];
+        let s = Number(n);
+        if (isNaN(s)) return "";
+        let i = 0;
+        while (s >= 1024 && i < units.length - 1) {
+          s /= 1024;
+          i++;
+        }
+        return (i === 0 ? s : s.toFixed(1)) + " " + units[i];
+      }
+
+      function esc(str) {
+        return String(str).replace(/[&<>"']/g, function (c) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          }[c];
+        });
+      }
+
+      async function loadManifest() {
+        const res = await fetch("downloads.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        const folder = data.folder || "downloads/";
+        const list = Array.isArray(data) ? data : data.items || [];
+
+        return list
+          .map(function (it) {
+            const file = typeof it === "string" ? it : it.file;
+            if (!file) return null;
+            const ext =
+              typeof it === "object" && it.ext
+                ? String(it.ext).toLowerCase()
+                : (file.split(".").pop() || "").toLowerCase();
+            return {
+              src: folder + file,
+              file: file,
+              ext: ext,
+              title:
+                typeof it === "object" && it.title
+                  ? it.title
+                  : file.replace(/\.[^.]+$/, ""),
+              size: typeof it === "object" ? it.size : 0,
+              date: typeof it === "object" && it.date ? it.date : "",
+            };
+          })
+          .filter(Boolean);
+      }
+
+      function render() {
+        filtered =
+          currentFilter === "all"
+            ? items.slice()
+            : items.filter(function (i) {
+              return catOf(i.ext) === currentFilter;
+            });
+
+        grid.innerHTML = "";
+
+        if (!filtered.length) {
+          empty.style.display = "block";
+          empty.textContent = items.length
+            ? "这个分类下暂时没有资料。"
+            : "暂时没有资料。";
+          return;
+        }
+        empty.style.display = "none";
+
+        filtered.forEach(function (item) {
+          const a = document.createElement("a");
+          a.className = "dl-card";
+          a.href = item.src;
+          a.setAttribute("download", "");
+          a.setAttribute("aria-label", "下载 " + item.file);
+
+          const st = styleOf(item.ext);
+          const icon = document.createElement("span");
+          icon.className = "dl-icon";
+          icon.style.background = st.color;
+          icon.textContent = st.label;
+
+          const info = document.createElement("span");
+          info.className = "dl-info";
+          info.innerHTML =
+            '<span class="dl-name">' +
+            esc(item.file) +
+            "</span>" +
+            '<span class="dl-meta">' +
+            [fmtSize(item.size), item.date]
+              .filter(Boolean)
+              .map(esc)
+              .join(" · ") +
+            "</span>";
+
+          a.appendChild(icon);
+          a.appendChild(info);
+          grid.appendChild(a);
+        });
+      }
+
+      toolbar.addEventListener("click", function (e) {
+        const btn = e.target.closest(".filter-btn");
+        if (!btn) return;
+        currentFilter = btn.dataset.filter;
+        toolbar.querySelectorAll(".filter-btn").forEach(function (b) {
+          b.classList.toggle("active", b === btn);
+        });
+        render();
+      });
+
+      loadManifest()
+        .then(function (list) {
+          items = list;
+          if (!items.length) {
+            empty.style.display = "block";
+            empty.textContent = "downloads 文件夹里还没有资料。";
+            return;
+          }
+          render();
+        })
+        .catch(function (err) {
+          empty.style.display = "block";
+          empty.textContent = "读取 downloads.json 失败。";
+          tip.textContent =
+            "错误：" +
+            err.message +
+            "。请通过本地服务器打开页面（例如 python -m http.server），或先运行 生成资料清单.bat。";
+          tip.style.color = "#c0392b";
+        });
+    })();
+  </script>
+</body>
+
+</html>
