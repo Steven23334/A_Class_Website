@@ -1,0 +1,352 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  padding: 64px 20px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url("../images/Phigros_background.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: "Saira", "SiYuan Font", sans-serif;
+}
+
+/* 页面顶部大字标题 */
+.title {
+  margin: 0 0 40px;
+  font-family: "Saira", "SiYuan Font", sans-serif;
+  font-size: clamp(48px, 9vw, 130px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-align: center;
+  color: #ffffff;
+  text-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.45),
+    0 0 42px rgba(0, 161, 214, 0.55);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ===== 右上角语言切换滑块 ===== */
+.lang-switch {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  width: 92px;
+  height: 38px;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: rgba(18, 24, 40, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  z-index: 100;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-opt {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 2;
+  transition: color 0.25s ease;
+  line-height: 1;
+}
+
+.lang-opt.active {
+  color: #fff;
+}
+
+.lang-slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00a1d6, #fb7299);
+  box-shadow: 0 4px 14px rgba(0, 161, 214, 0.5);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.lang-switch.en .lang-slider {
+  transform: translateX(100%);
+}
+
+/* ===== 页面主卡片（原弹窗主体） ===== */
+.modal {
+  position: relative;
+  width: min(420px, 100%);
+  box-sizing: border-box;
+  padding: 38px 32px 32px;
+  border-radius: 24px;
+  background: rgba(18, 24, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.55),
+    0 0 60px rgba(0, 161, 214, 0.18);
+}
+
+.modal-title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 24px rgba(0, 161, 214, 0.5);
+}
+
+.modal-sub {
+  margin: 0 0 16px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+/* ===== 分区标签（统一使用官方版蓝色） ===== */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+  color: #7fd8f5;
+  text-shadow: 0 0 16px rgba(0, 161, 214, 0.55);
+}
+
+.section-label::before,
+.section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+
+.section-label::before {
+  background: linear-gradient(90deg, transparent, rgba(0, 161, 214, 0.6));
+}
+
+.section-label::after {
+  background: linear-gradient(90deg, rgba(0, 161, 214, 0.6), transparent);
+}
+
+.section-label.top {
+  margin: 0 0 18px;
+}
+
+.section-label.mid {
+  margin: 6px 0 2px;
+}
+
+/* ===== 路线列表 ===== */
+.routes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.22s ease, border-color 0.22s ease,
+              transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.route:hover {
+  background: rgba(0, 161, 214, 0.18);
+  border-color: rgba(0, 161, 214, 0.75);
+  transform: translateX(6px);
+  box-shadow: 0 8px 26px rgba(0, 161, 214, 0.3);
+}
+
+.route-num {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #00a1d6, #fb7299);
+  box-shadow: 0 4px 14px rgba(0, 161, 214, 0.4);
+}
+
+.route-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.route-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.route-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 视频区块（嵌入 B 站播放器） ===== */
+.video-block {
+  margin-top: 18px;
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 12px;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== 版权声明 ===== */
+footer {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.4;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer a {
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(127, 216, 245, 0.35);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+footer a:hover {
+  color: #fff;
+  border-bottom-color: rgba(251, 114, 153, 0.9);
+}
+
+/* ===== 视频播放提示（注释样式） ===== */
+.video-tip {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1.5;
+}
+
+.video-tip::before {
+  content: "♪";
+  margin-right: 6px;
+  color: rgba(251, 114, 153, 0.85);
+}
+
+/* 兼容不支持 aspect-ratio 的旧浏览器 */
+@supports not (aspect-ratio: 16 / 9) {
+  .video-wrap { height: 0; padding-bottom: 56.25%; }
+}
+
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* 非 B 站链接时的超链接卡片 */
+.video-fallback-link {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #7fd8f5;
+  background: rgba(18, 24, 40, 0.85);
+  transition: color 0.2s ease, background 0.2s ease;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.video-fallback-link::before {
+  content: "▶ ";
+  margin-right: 6px;
+  color: rgba(251, 114, 153, 0.9);
+}
+
+.video-fallback-link:hover {
+  color: #fff;
+  background: rgba(0, 161, 214, 0.22);
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SiYuan Font';
+  src: url('../fonts/SourceHanSansSC-Regular-2.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

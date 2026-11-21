@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="shortcut icon" href="images/favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-zh="Phigros 跳转页" data-en="Phigros Redirect Page">Phigros 跳转页</title>
+  <link rel="stylesheet" href="css/style_1.css">
+</head>
+<body>
+  <!-- 大标题 -->
+  <!-- <h1 class="title">Phigros</h1> -->
+
+  <!-- 右上角语言切换滑块 -->
+  <div class="lang-switch" id="langSwitch" role="switch" aria-checked="false"
+       aria-label="Language switch" tabindex="0">
+    <span class="lang-opt active" data-lang="zh">中</span>
+    <span class="lang-opt" data-lang="en">EN</span>
+    <span class="lang-slider"></span>
+  </div>
+
+  <!-- 主卡片（原弹窗内容，现在直接放在页面里） -->
+  <div class="modal">
+    <h2 class="modal-title" id="modalTitle" data-zh="Phigros跳转页" data-en="Phigros Redirect Page">Phigros跳转页</h2>
+    <p class="modal-sub" data-zh="选择你的网址" data-en="Choose your website">选择你的网址</p>
+
+    <div class="section-label top"
+         data-zh="Phigros官方" data-en="Phigros Official">Phigros官方</div>
+
+    <div class="routes">
+      <!-- 路线一 -->
+      <a class="route"
+         href="https://space.bilibili.com/414149787"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">01</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="Bilibili官方账号 · BiliBili"
+                data-en="Bilibili Official · BiliBili">Bilibili官方账号 · BiliBili</span>
+          <span class="route-desc">www.bilibili.com</span>
+        </span>
+      </a>
+
+      <!-- 路线二 -->
+      <a class="route"
+         href="https://phigros.fandom.com/zh/wiki/Phigros_Wiki"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">02</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="Wiki · Phigros Wiki"
+                data-en="Wiki · Phigros Wiki">Wiki · Phigros Wiki</span>
+          <span class="route-desc">phigros.fandom.com/zh/wiki/Phigros_Wiki</span>
+        </span>
+      </a>
+
+      <!-- 路线三 -->
+      <a class="route"
+         href="https://www.taptap.cn/app/165287"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">03</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="游戏下载 · TapTap"
+                data-en="Game Download · TapTap">游戏下载 · TapTap</span>
+          <span class="route-desc">www.taptap.cn</span>
+        </span>
+      </a>
+
+      <!-- 路线四 -->
+      <a class="route"
+         href="https://www.taptap.cn/app/201173"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">04</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="友情出演 · 律动轨迹"
+                data-en="Cameo · Rizline">友情出演 · 律动轨迹</span>
+          <span class="route-desc">www.taptap.cn</span>
+        </span>
+      </a>
+
+      <!-- Phi社区资源 -->
+      <div class="section-label mid"
+           data-zh="Phi社区资源" data-en="Phi Community Resources">Phi社区资源</div>
+
+      <!-- 路线五 -->
+      <a class="route"
+         href="https://pgrfm.miraheze.org/wiki/Re:PhiEdit"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">05</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="谱面制作 · Re:PhiEdit(Wiki链接)"
+                data-en="Chart Editing · Re:PhiEdit (Wiki Link)">谱面制作 · Re:PhiEdit(Wiki链接)</span>
+          <span class="route-desc">pgrfm.miraheze.org/wiki/Re:PhiEdit</span>
+        </span>
+      </a>
+
+      <!-- 路线六 -->
+      <a class="route"
+         href="https://www.phizone.cn/"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">06</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="谱面预览 · PhiZone"
+                data-en="Chart Preview · PhiZone">谱面预览 · PhiZone</span>
+          <span class="route-desc">www.phizone.cn</span>
+        </span>
+      </a>
+
+      <!-- 路线七 -->
+      <a class="route"
+         href="https://phira.moe"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">07</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="社区版一 · Phira"
+                data-en="Community Ver. 1 · Phira">社区版一 · Phira</span>
+          <span class="route-desc">phira.moe</span>
+        </span>
+      </a>
+
+      <!-- 路线八 -->
+      <a class="route"
+         href="https://www.phigrim.cn"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">08</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="社区版二 · Phigrim"
+                data-en="Community Ver. 2 · Phigrim">社区版二 · Phigrim</span>
+          <span class="route-desc">www.phigrim.cn</span>
+        </span>
+      </a>
+
+      <!-- 路线九 -->
+      <a class="route"
+         href="https://phitogether.fun/"
+         target="_blank" rel="noopener noreferrer">
+        <span class="route-num">09</span>
+        <span class="route-text">
+          <span class="route-name"
+                data-zh="社区版三 · PhiTogether"
+                data-en="Community Ver. 3 · PhiTogether">社区版三 · PhiTogether</span>
+          <span class="route-desc">phitogether.fun/</span>
+        </span>
+      </a>
+    </div>
+
+    <!-- ===== 每日视频（B 站播放器嵌入） ===== -->
+    <div class="video-block">
+      <div class="section-label mid"
+           data-zh="每日视频" data-en="Daily Videos">每日视频</div>
+
+      <div class="video-wrap">
+        <!-- 换视频只改 data-src：填 www.bilibili.com 视频页链接或 player.bilibili.com 嵌入链接 -->
+        <iframe id="biliPlayer"
+                data-src="https://www.bilibili.com/video/BV1wE5K6xEwv"
+                scrolling="no"
+                frameborder="no"
+                allowfullscreen="true"
+                loading="lazy"
+                title="每日视频"></iframe>
+      </div>
+
+      <!-- 视频播放提示（注释） -->
+      <p class="video-tip"
+         data-zh="按 M 键切换静音"
+         data-en="Press M to toggle mute">按 M 键切换静音</p>
+    </div>
+
+    <footer>
+      <a href="LICENSE/LICENSE.html"
+         target="_blank"
+         rel="noopener noreferrer">
+        <p data-zh="Copyright (c) 2026 Steven23334,MIT"
+           data-en="Copyright (c) 2026 Steven23334,MIT">
+           Copyright (c) 2026 Steven23334,MIT</p>
+      </a>
+      <a href="https://space.bilibili.com/3493293102991497"
+         target="_blank"
+         rel="noopener noreferrer">
+        <p data-zh="浙ICP备114514号-Steven23334（测试）"
+           data-en="Zhejiang ICP No. 114514 - Steven23334 (Test)">
+           浙ICP备114514号-Steven23334（测试）</p>
+      </a>
+      <p data-zh="Phigros 跳转页，仅供学习交流"
+         data-en="Phigros Redirect Page, For learning and exchange only">Phigros 跳转页，仅供学习交流</p>
+    </footer>
+  </div>
+
+  <script>
+  /* ===== 1. 语言切换（先执行，不受视频挂载影响） ===== */
+  (function () {
+    var langSwitch = document.getElementById('langSwitch');
+    if (!langSwitch) return;
+
+    var langOpts   = langSwitch.querySelectorAll('.lang-opt');
+    var currentLang = 'zh';
+
+    function setLang(lang) {
+      currentLang = lang;
+
+      document.documentElement.lang = (lang === 'zh') ? 'zh-CN' : 'en';
+
+      langSwitch.classList.toggle('en', lang === 'en');
+      langSwitch.setAttribute('aria-checked', lang === 'en' ? 'true' : 'false');
+      langOpts.forEach(function (opt) {
+        opt.classList.toggle('active', opt.dataset.lang === lang);
+      });
+
+      document.querySelectorAll('[data-zh][data-en]').forEach(function (el) {
+        el.textContent = el.getAttribute('data-' + lang);
+      });
+
+      document.querySelectorAll('[data-zh-aria][data-en-aria]').forEach(function (el) {
+        el.setAttribute('aria-label', el.getAttribute('data-' + lang + '-aria'));
+      });
+    }
+
+    langSwitch.addEventListener('click', function () {
+      setLang(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    langSwitch.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setLang(currentLang === 'zh' ? 'en' : 'zh');
+      }
+    });
+  })();
+
+  /* ===== 2. 视频挂载（只认 player.bilibili.com / www.bilibili.com） ===== */
+  (function () {
+    try {
+      var iframe = document.getElementById('biliPlayer');
+      if (!iframe) return;
+
+      var raw = iframe.getAttribute('data-src');
+      if (!raw) return;
+
+      var url = new URL(raw, location.href);
+
+      var isPlayer    = url.hostname === 'player.bilibili.com';
+      var isVideoPage = url.hostname === 'www.bilibili.com';
+
+      // 情况 A：player.bilibili.com 嵌入链接 → 直接补/覆盖参数
+      if (isPlayer) {
+        url.searchParams.set('autoplay', '0');
+        url.searchParams.set('muted', '0');
+        iframe.src = url.toString();
+        return;
+      }
+
+      // 情况 B：www.bilibili.com 视频页 → 提取 BV 号转嵌入链接
+      if (isVideoPage) {
+        var m = url.pathname.match(/\/video\/(BV[0-9A-Za-z]+)/);
+        if (m) {
+          url = new URL('https://player.bilibili.com/player.html');
+          url.searchParams.set('bvid', m[1]);
+          url.searchParams.set('autoplay', '0');
+          url.searchParams.set('muted', '0');
+          iframe.src = url.toString();
+          return;
+        }
+        // www.bilibili.com 但不是 /video/BV... 路径（首页、专栏等）→ 走超链接
+      }
+
+      // 情况 C：其他域名（space、m、tv、youtube…）→ 渲染成超链接
+      renderFallbackLink(url);
+
+      function renderFallbackLink(u) {
+        var wrap = iframe.parentNode;
+        if (!wrap) return;
+
+        iframe.style.display = 'none';
+
+        var host = u.hostname;
+        var zhText = '打开外部链接 · ' + host;
+        var enText = 'Open external website · ' + host;
+
+        var link = document.createElement('a');
+        link.href = u.toString();
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'video-fallback-link';
+        link.setAttribute('data-zh', zhText);
+        link.setAttribute('data-en', enText);
+        link.textContent = zhText;
+
+        wrap.appendChild(link);
+      }
+    } catch (e) {
+      console.warn('视频链接解析失败，保持 iframe 原样：', e);
+    }
+  })();
+  </script>
+</body>
+</html>
